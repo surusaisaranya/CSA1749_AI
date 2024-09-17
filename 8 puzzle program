@@ -1,0 +1,59 @@
+from collections import deque
+
+# Define the goal state
+goal_state = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+
+# Function to find the zero position
+def find_zero(state):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == 0:
+                return i, j
+
+# Generate possible moves
+def generate_moves(state):
+    moves = []
+    x, y = find_zero(state)
+    possible_moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]  # up, down, left, right
+
+    for nx, ny in possible_moves:
+        if 0 <= nx < 3 and 0 <= ny < 3:
+            new_state = [row[:] for row in state]  # Copy the current state
+            new_state[x][y], new_state[nx][ny] = new_state[nx][ny], new_state[x][y]  # Swap tiles
+            moves.append(new_state)
+    
+    return moves
+
+# Breadth-First Search algorithm to solve the 8-puzzle
+def bfs(start_state):
+    queue = deque([start_state])
+    visited = set()
+    visited.add(tuple(map(tuple, start_state)))  # Add the starting state to visited
+
+    while queue:
+        current_state = queue.popleft()
+
+        if current_state == goal_state:
+            return current_state
+
+        for move in generate_moves(current_state):
+            state_tuple = tuple(map(tuple, move))
+            if state_tuple not in visited:
+                visited.add(state_tuple)
+                queue.append(move)
+
+    return None
+
+# Initial puzzle state (can be changed to any solvable state)
+initial_state = [[1, 2, 3], [4, 0, 6], [7, 5, 8]]
+print("Intial State of the matrix")
+for row in initial_state:
+    print(row,end="")
+    print()
+# Solve the puzzle using BFS
+result = bfs(initial_state)
+
+# Print the result
+print("Final solved state:")
+for row in result:
+    print(row)
