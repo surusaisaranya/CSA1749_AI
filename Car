@@ -1,0 +1,10 @@
+owns(jack, car(bmw)). // jack owns bmw car
+owns(john, car(chevy)). // john owns chevy car
+owns(olivia, car(civic)). // olivia owns civic car
+owns(jane, car(chevy)). // jane owns chevy car
+sedan(car(bmw)). // bmw car is sedan
+sedan(car(civic)). // civic car is sedan
+truck(car(chevy)). // chevy car is truck
+
+?- owns(john, X).
+X = car(chevy).
